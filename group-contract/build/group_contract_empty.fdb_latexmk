@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1759173221.0309 "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/group_contract_empty.tex" "build/group_contract_empty.pdf" "group_contract_empty" 1759173221.82815 0
-  "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/group_contract_empty.tex" 1759173220.88581 6849 cfacca80949b0d71dead709ba06574a2 ""
+["pdflatex"] 1759316671.46749 "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/group_contract_empty.tex" "build/group_contract_empty.pdf" "group_contract_empty" 1759316672.25653 0
+  "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/group_contract_empty.tex" 1759316671.21266 7199 16de3d69899613964e3432918ec43f79 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -67,9 +67,9 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1746887052 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "build/group_contract_empty.aux" 1759173221.76578 162 fa61bf9ecf9314f94d51aa32222a725c "pdflatex"
-  "build/group_contract_empty.out" 1759173221.49934 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "group_contract_empty.tex" 1759173220.88581 6849 cfacca80949b0d71dead709ba06574a2 ""
+  "build/group_contract_empty.aux" 1759316672.18881 162 fa61bf9ecf9314f94d51aa32222a725c "pdflatex"
+  "build/group_contract_empty.out" 1759316671.91853 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "group_contract_empty.tex" 1759316671.21266 7199 16de3d69899613964e3432918ec43f79 ""
   (generated)
   "build/group_contract_empty.aux"
   "build/group_contract_empty.log"

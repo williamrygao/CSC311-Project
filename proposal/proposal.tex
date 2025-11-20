@@ -1,0 +1,200 @@
+% =========================================================
+% CSC311 Final Project Report Template
+% Single column, 12pt, 8 pages max.
+% =========================================================
+
+\documentclass[12pt]{article}
+
+% ---------- Packages ----------
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}         % blank line between paragraphs, no indent
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath, amssymb}
+\usepackage{siunitx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{mathpazo}
+
+% ---------- Captions & Lists ----------
+\captionsetup{font=small, labelfont=bf}
+\setlist[itemize]{noitemsep, topsep=2pt}
+\setlist[enumerate]{noitemsep, topsep=2pt}
+
+% ---------- Helpful macros ----------
+\newcommand{\bestmodel}{\textit{[Best Model Name]}}
+\newcommand{\projacc}{\textbf{[XX.XX\%]}}
+
+% ---------- Safe figure helper ----------
+\makeatletter
+\newcommand{\maybeincludegraphics}[3]{%
+  \begin{figure}[h]
+    \centering
+    \IfFileExists{#1}{%
+      \includegraphics[width=0.7\linewidth]{#1}%
+    }{%
+      \fbox{%
+        \parbox[c][0.28\textheight][c]{0.7\linewidth}{%
+          \centering
+          \vspace{0.5em}
+          \textit{[Placeholder for \texttt{#1}]}\\
+          Add your figure here.
+          \vspace{0.5em}
+        }%
+      }%
+    }%
+    \caption{#2}
+    \label{#3}
+  \end{figure}%
+}
+\makeatother
+
+\begin{document}
+
+% ==================================================
+% 3. Data Exploration
+% ==================================================
+\section{Data Exploration} 
+
+% Why is data exploration important in a machine learning project?
+% \begin{itemize}
+%   \item Understand the dataset by identifying feature types (numerical, categorical, text), distributions, and class balance.  
+%   \item Detect issues by finding missing values, outliers, or inconsistent entries that could harm model training.  
+%   \item Inform pre-processing by deciding which transformations are needed (e.g., normalization, encoding, text vectorization).  
+%   \item Guide model choice by identifying patterns (e.g., linear vs.\ nonlinear relationships) that suggest suitable algorithms.  
+%   \item Generate insights by developing intuition about which features may be most predictive or relevant.  
+% \end{itemize}
+
+% What you should write in this section:
+% \begin{itemize}
+  % \item Summarize the dataset by describing the main feature types, distributions, and class balance.  
+  % \item Identify issues you found such as missing values, outliers, or inconsistencies.  
+  % \item Describe pre-processing by explaining what transformations you applied and why.  
+  % \item Explain data splitting by describing how you reserved a portion of the data as a test set. This test set should \textbf{not} be used during data exploration.  
+  % \item Use figures when helpful by including plots or tables and explaining what they reveal.  
+  % \item Connect findings to model choices by highlighting patterns that influenced your selection of models.  
+  % \item Share key insights by presenting observations about especially relevant or predictive features.  
+% \end{itemize}
+
+% Note: Each student contributes three data points (one per class). These three points are closely related, so if they are split across training, validation, and test sets, information from one could leak into another set. To avoid this data leakage, all three points from the same student must remain together in the same split.
+
+\subsection{Feature Types}
+\textbf{Numerical features}: ``How likely are you to use this model for academic tasks?'', ``Based on your experience, how often has this model given you a response that felt suboptimal?'', How often do you expect this model to provide responses with references or supporting evidence?, How often do you verify this model's responses?
+
+\textbf{Categorical features}: Which types of tasks do you feel this model handles best?, For which types of tasks do you feel this model tends to give suboptimal responses?, label.
+
+\textbf{Text features}: ``In your own words, what kinds of tasks would you use this model for?'', ``Think of one task where this model gave you a suboptimal response. What did the response look like, and why did you find it suboptimal?'', "When you verify a response from this model, how do you usually go about it?".
+
+% \textbf{Note}: We will treat these features measured on a scale from 1 to 5 as numerical in order to preserve the ordinal information encoded by the numerical representation.
+
+\subsection{Distributions and Class Balance}
+\begin{itemize}
+  \item The labels ChatGPT, Claude, and Gemini each appear 275 times, as desired. This perfect class balance ensures the model will train from a fairly-weighted dataset.
+  \item The distribution of response for each of the four numerical features is shown in Figure 1. As expected, the mean and median are generally close to the neutral answer 3, although the median is 4 for the first and last questions.
+\end{itemize}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.2]{../images/academic-distr.png}
+  \includegraphics[scale=0.2]{../images/suboptimal-distr.png}
+  \includegraphics[scale=0.2]{../images/references-distr.png}
+  \includegraphics[scale=0.2]{../images/verify-distr.png}
+  \caption{Distributions of numerical features.}
+\end{figure}
+
+\subsection{Issues in Data and Proprocessing Transformations}
+\begin{itemize}
+  \item The dataset has missing values, such as in lines 9-10 or training\_data\_clean.csv.
+  \item A nonsensical feature ``\#NAME?'' appears 4 times.
+  \item Missing or nonsensical values were handled by dropping rows. 
+  \item For features answered on a scale from 1 to 5, the first character of the string response was converted to an integer, to treat the feature as numerical.
+  \item Multi-select survey responses were converted into binary features.
+\end{itemize}
+\subsection{Data Splitting}
+\begin{itemize}
+  \item The last 30\% of the rows were reserved as a test set, and ignored during data exploration. The first 70\% will be split into training and validation sets.
+\end{itemize}
+
+% ====================================
+% Methodology
+% ====================================
+\section{Methodology}
+\subsection{Model Families}
+Our dataset is relatively small, so we will focus on relatively simple, computationally-efficient models.
+\begin{enumerate}
+  \item \emph{k-Nearest Neighbours:} kNN naturally handles numerical ratings, binary features derived from multi-select responses, and structured features such as text. Its dependence on feature similarity makes it an intuitive choice for this dataset, where patterns of task preferences and ratings indicate model usage. The fact that kNN does not assume a linear relationship between features and labels is also desirable, as we have little reason to expect a linear relationship based on our data exploration, for example the distributions of numerical features.
+
+  \item \emph{Decision Trees:} Decision trees are suitable for mixed feature types and capturing relationships between numerical features and binary categorical features, which form an important part of our dataset. The numerical features exhibit relatively low entropy distributions, with noticeable concentration near rating 3-4. This means sampled values are more predictable, and information gain from numerical feature splits can be quite high. We can extend this to random forests, using ensemble averaging to avoid overfitting.
+
+  \item \emph{(Multinomial) Logistic Regression:} Logistic regression is a computationally efficient classification model, which can be adapted in many different ways using techniques such as feature mapping to capture nonlinear relationships between features, and regularization to prevent overfitting on our relatively small dataset.
+\end{enumerate}
+
+\subsection{Optimization Techniques}
+\begin{enumerate}
+  \item \emph{k-Nearest Neighbours:} kNN is non-parametric.
+
+  \item \emph{Decision Trees:} Decision trees are also non-parametric. In learning the decision tree, splits are chosen to maximize information gain.
+
+  \item \emph{(Multinomial) Logistic Regression:} Gradient-based optimization is the natural choice for logistic regression. Stochastic gradient descent or mini-batch gradient descent would both be appropriate given our small dataset. Alternatively, other gradient-based optimization techniques such as limited-memory BFGS could be applied.
+  
+  If using SGD, decay or adaptive learning rate could help speed up convergence. For regularization, L2 regularization is a common choice although L1 could be worth trying as well.
+
+  As convergence from gradient descent may not be feasible, we can try stopping after a fixed number of epochs / iterations or once the gradient is sufficiently small.
+\end{enumerate}
+
+\subsection{Validation Method}
+Recall that the first 70\% of the dataset remains after excluding the test set. We can designate the first 50\% as the training set and the middle 20\% as the validation set. As with the test set, it would not be appropriate to randomly select the validation set among the first 70\% (or similarly, to use cross validation), because there are three data points per user answer and spreading a single user's answers between training set and validation set may cause data leakage.
+
+Alternatively, this could be resolved by clustering data points from the same student, then applying cross-validation to the clustered data.
+
+\subsection{Hyperparameters}
+\begin{enumerate}
+  \item \emph{k-Nearest Neighbours}
+  \begin{enumerate}
+    \item $k$, the number of nearest neighbours. Based on the heuristic $k < \sqrt{N} = \sqrt{275} \approx 17$, we can vary $k$ in the range $k = 1$ to $k = 20$.
+    \item The distance metric. Canonical choices include Euclidean metric, Manhattan metric, cosine similarity, uniform metric, $L^p$ metric. Different metrics will slightly change how the features interact, which can be important for capturing particular relationships between the numerical and categorical features.
+  \end{enumerate}
+
+  \item \emph{Decision Trees}
+  \begin{enumerate}
+    \item The maximum depth of a decision tree. A tree that is too deep will likely overfit the training data, while a tree that is too shallow cannot classify the data sufficiently precisely. An appropriate range for tree depth would be 3 to 20.
+    \item Minimum samples per leaf. A leaf with too few samples likely overfits the training data, while a leaf with too many samples likely means the tree did not learn more complex patterns in the data. A reasonable range would be 2 to 50.
+    \item Similarly, minimum samples to split a node.
+    \item Criterion. The information gain of a split may be computed using Gini impurity or entropy. By producing different splits, different criteria might better represent the data.
+  \end{enumerate}
+
+  \item \emph{(Multinomial) Logistic Regression}
+  
+  \begin{enumerate}
+    \item Regularization method (L2, L1) and coefficient (0.01 to 10). This allows us to vary the degree to which large weights are penalized, because while we want the model to consider a combination of all the features, it is plausible that certain features are more predictive than others.
+    
+    \item Maximum number of epochs / iterations, if early stopping. This represents an efficiency-accuracy tradeoff, as stopping earlier would be more computationally feasible but often less accurate. 100-5000 iterations should be suffice to capture both underfitting and overfitting models.
+        
+    \item Various feature mappings. Different feature mapping will cause the logistic regression model to capture different relationships between the data. We can apply no feature mapping (assume linear relationship), or polynomial feature mapping of various degrees.
+    \item We can even do feature engineering with Term Frequency--Inverse
+    Document Frequency to represent the text-structured data in a linear way.
+  \end{enumerate}
+\end{enumerate}
+
+\subsection{Evaluation Metrics}
+\begin{itemize}
+  \item \emph{Accuracy:} the number of correct predictions divided by the number of predictions. This is the standard evaluation metric for machine learning models.
+  \item \emph{Precision:} the number of correct positive predictions divided by the number of positive predictions. By focusing on positive outputs, precision provides insight into the reliability of the model's predictions with respect to each label. This can help with model interpretability, and thus it can inform hyperparameter tuning in ways that may not be apparent from accuracy. A model with many false positives would likely have a low precision, although the accuracy could still be relatively high.
+  \item \emph{Recall:} the number of correct positive predictions divided by the number of positive ground truth labels. Similarly to precision, this can measure the model's ability to identify a particular label. It is slightly different in that it compares the number of true positives to the number of ground truth positives, rather than the positive predictions. As a result, it can provide insight into the model's overall class coverage, ensuring that no class is disproportionately neglected in the model's predictions. A model with many false negatives would likely have a low recall, but it could still have a relatively high accuracy or precision.
+  \item \emph{F1:} $2 \cdot \frac{\text{precision } \cdot \text{ recall}}{\text{precision } + \text{ recall}}$, the harmonic mean of precision and recall. This provides a more balanced account of the previous two insights. Thus it provides insight into both false positives and false negatives.
+\end{itemize}
+
+% % ==================================================
+% % 9. References
+% % ==================================================
+% \section{References}
+
+% You should comment out this section for the final report.
+
+% Use references whenever appropriate (e.g., when you consult textbooks, research papers, online tutorials, or external code). Cite in the text using \verb|\cite{}|. For example, let's cite the two references provided in the \texttt{.bib} file \cite{bishop2006prml,hastie2009esl}.
+
+% \bibliographystyle{plain}
+% \bibliography{references}
+
+\end{document}
