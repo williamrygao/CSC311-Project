@@ -371,8 +371,6 @@ INPUT ../images/logistic_regression/penalty.png
 INPUT ../images/logistic_regression/penalty.png
 INPUT ../images/logistic_regression/penalty.png
 INPUT ../images/logistic_regression/penalty.png
-INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/palatino/pplri7t.tfm
-INPUT /usr/local/texlive/2025/texmf-dist/fonts/vf/adobe/palatino/pplri7t.vf
 INPUT build/project_report.bbl
 INPUT build/project_report.bbl
 INPUT build/project_report.bbl

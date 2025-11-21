@@ -190,19 +190,23 @@ Decision trees are suitable for mixed feature types and capturing relationships 
 % ===========================================
 \section{Results (1 page)}\label{sec:results}
 \subsection{Logistic Regression}
-By performing a grid search across the hyperparameter ranges specified in the methodology, we found the best hyperparameters to be:
-\begin{itemize}
-  \item \texttt{max\_features} $= 300$.
-  \item \texttt{ngram\_range} $= (1,1)$.
-  \item $C = 5$.
-  \item \texttt{penalty} $= L2$.
-  \item \texttt{solver} $=$ saga.
-\end{itemize}
-The mean evaluation metrics for the best combinations of hyperparameters are summarized in Table 1.
+By performing a grid search across the hyperparameter ranges specified in the methodology, we record the best hyperparameters in Table 1:
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccccc}
+\hline
+\textbf{Model} & \textbf{Penalty} & \textbf{Solver} & \textbf{C} & \textbf{Max Features} & \textbf{N-grams} \\
+\hline
+TF-IDF & L2 & saga & 5 & 300 & {(1,1)} \\
+No-Text & L1 & saga & 0.1 & N/A & N/A \\
+\hline
+\end{tabular}
+\caption{Best hyperparameters from cross-validation for TF-IDF and No-Text logistic regression models. Accuracy is macro-averaged over 5-fold CV.}
+\label{tab:best-hyperparameters}
+\end{table}
+The mean evaluation metrics for the best combinations of hyperparameters are summarized in Table 2.
 
-\textbf{Analysis:} Incorporating TF-IDF features improved validation performance, increasing all evaluation metrics by roughly 3-4 points. Training accuracy for the TF-IDF variant was substantially higher ($\approx$96\%), suggesting some degree of overfitting, though the validation scores remained higher than the non-text model. The confusion matrices indicate that most misclassifications occur between \textit{Claude} and \textit{Gemini}, likely reflecting subtle differences in responses that are challenging to capture with the current features.
-
-\textbf{Final Model Choice and Test Performance:} Based on cross-validation, the logistic regression model using TF-IDF features with $C=1$, L2 regularization, and the \texttt{lbfgs} solver achieved the best mean F1 score of 0.691. We estimate that this model will achieve approximately \textbf{69\% accuracy} on unseen test data, justified by consistent performance across all folds and stable cross-validation metrics.
+\textbf{Error Analysis:}
 
 \subsection{Naive Bayes Classifier}
 \subsection{Random Forest Classifier}
@@ -212,7 +216,7 @@ The mean evaluation metrics for the best combinations of hyperparameters are sum
 \hline
 \textbf{Model} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
 \hline
-Logistic Regression (no text) & ? & ? & ? & ? \\
+Logistic Regression (no text) & 0.650 & 0.643 & 0.650 & 0.645 \\
 Logistic Regression (with TF-IDF) & 0.659 & 0.653 & 0.659 & 0.655 \\
 Naive Bayes & ? & ? & ? & ? \\
 Random Forest & ? & ? & ? & ? \\
