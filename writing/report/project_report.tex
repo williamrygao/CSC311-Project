@@ -190,23 +190,22 @@ Decision trees are suitable for mixed feature types and capturing relationships 
 % ===========================================
 \section{Results (1 page)}\label{sec:results}
 \subsection{Logistic Regression}
-By performing a grid search across the hyperparameter ranges specified in the methodology, we record the best hyperparameters in Table 1:
-\begin{table}[h!]
+Table 1 summarizes the best combination of hyperparameters for logistic regression. Table 2 contains the resulting mean evaluation metrics.
+\begin{table}[ht]
 \centering
 \begin{tabular}{lccccc}
 \hline
 \textbf{Model} & \textbf{Penalty} & \textbf{Solver} & \textbf{C} & \textbf{Max Features} & \textbf{N-grams} \\
 \hline
 TF-IDF & L2 & saga & 5 & 300 & {(1,1)} \\
-No-Text & L1 & saga & 0.1 & N/A & N/A \\
+No Text & L1 & saga & 0.1 & N/A & N/A \\
 \hline
 \end{tabular}
-\caption{Best hyperparameters from cross-validation for TF-IDF and No-Text logistic regression models. Accuracy is macro-averaged over 5-fold CV.}
+\caption{Logistic regression hyperparameters with strongest $5$-fold CV performance.}
 \label{tab:best-hyperparameters}
 \end{table}
-The mean evaluation metrics for the best combinations of hyperparameters are summarized in Table 2.
 
-\textbf{Error Analysis:}
+\textbf{Error Analysis:} As evidenced by the confusion matrix (see Figure 3), the model achieved strong predictive performance (accuracy: 0.82, F1: 0.85) of ChatGPT, which it predicted more frequently, but often confused Claude (F1: 0.56) and Gemini (F1: 0.55). The top two highest-confidence misclassifications predicted ChatGPT when the true labels were Claude (confidence: 0.998490) and Gemini (confidence: 0.986409).
 
 \subsection{Naive Bayes Classifier}
 \subsection{Random Forest Classifier}
@@ -226,15 +225,14 @@ Random Forest & ? & ? & ? & ? \\
 \label{tab:model_metrics}
 \end{table}
 
-\subsection{Instructions}
-What you should write in this section:
-\begin{itemize}
-  \item Report the results of your models using the evaluation metrics you described in the Methodology section, and present them clearly in tables or plots.
-  \item Analyze errors by describing common misclassifications or weaknesses, and include a confusion matrix or illustrative examples if helpful.
-  \item Compare models by summarizing performance across model families, and clearly state your final model choice as implemented in your prediction script.
-  \item Estimate test performance by \textbf{providing a single-number estimate of your best model's accuracy on the unseen test set}. Providing a range will earn \textbf{no} marks.
-  \item Justify your performance estimate by supporting it with empirical evidence such as validation results, cross-validation stability, learning curves, or consistency across seeds/folds.
-\end{itemize}
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{../images/logistic_regression/confusion_matrix.png}    \caption{Confusion matrices for logistic regression, naive Bayes, and random forest models.}
+  \end{figure}
+
+\subsection{Model Comparison}
+The model families from strongest to weakest performance were: [RANK MODELS]. The estimated test performance of [BEST MODEL + 1-NUMBER ACCURACY ESTIMATE]. This estimate is the average accuracy across $5$-folds CV and the test performance, which were all quite consistent.
+
 % ================================================
 % 8. Contributions and Learning
 % ================================================
@@ -250,8 +248,6 @@ This section should contain a list of 3-4 bullets, one for each student. Each st
 % ==================================================
 % 9. References
 % ==================================================
-\section{References}
-
 % You should comment out this section for the final report.
 
 % Use references whenever appropriate (e.g., when you consult textbooks, research papers, online tutorials, or external code). Cite in the text using \verb|\cite{}|. For example, let's cite the two references provided in the \texttt{.bib} file \cite{bishop2006prml,hastie2009esl}.

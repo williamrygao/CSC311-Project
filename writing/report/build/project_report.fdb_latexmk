@@ -1,21 +1,22 @@
 # Fdb version 4
-["bibtex build/project_report"] 1763692515.62493 "build/project_report.aux" "build/project_report.bbl" "build/project_report" 1763692575.99149 0
+["bibtex build/project_report"] 1763742269.25101 "build/project_report.aux" "build/project_report.bbl" "build/project_report" 1763742315.90342 0
   "./references.bib" 1763684133.25482 279 2da0ed7864ca70f2835c62055eb1fed6 ""
   "/usr/local/texlive/2025/texmf-dist/bibtex/bst/base/plain.bst" 1292289607 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "build/project_report.aux" 1763692575.76798 3531 286ef4e10af11d14214118239bbf9f43 "pdflatex"
+  "build/project_report.aux" 1763742315.67165 3507 cfa40b35fbbebc11fc3c83a05dceedf3 "pdflatex"
   (generated)
   "build/project_report.bbl"
   "build/project_report.blg"
   (rewritten before read)
-["pdflatex"] 1763692574.75931 "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/writing/report/project_report.tex" "build/project_report.pdf" "project_report" 1763692575.99161 0
+["pdflatex"] 1763742314.64895 "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/writing/report/project_report.tex" "build/project_report.pdf" "project_report" 1763742315.90357 0
   "../images/academic-distr.png" 1760475708.48718 29210 349258039f56f04787a7778f3f1a8866 ""
   "../images/logistic_regression/C.png" 1763681216.25096 56633 8e70b50922a5386c290eab34440dddc5 ""
+  "../images/logistic_regression/confusion_matrix.png" 1763740758.41316 23265 c18db9a71609621d8930b1f4d88f3be7 ""
   "../images/logistic_regression/max_features.png" 1763681198.00331 61501 d4ac553e33e5ae882fb3e57d99c256bd ""
   "../images/logistic_regression/penalty.png" 1763681230.11568 40089 ab1469bcda7a5de6b52b9a0012662873 ""
   "../images/references-distr.png" 1760475733.43141 28491 0206b0f477b0f644f68e16e050799621 ""
   "../images/suboptimal-distr.png" 1760475723.4857 29672 48bca3d18c3972afb82ba152e3efeefe ""
   "../images/verify-distr.png" 1760475742.37967 24367 93f73df7f282f6e8e85085eb2ed6e9ce ""
-  "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/writing/report/project_report.tex" 1763692574.64645 14875 87953e5cb62e1322b0e77183bb8b8f9d ""
+  "/Users/william/Desktop/Projects/Notes/CSC311/CSC311 Project/writing/report/project_report.tex" 1763742314.53368 14695 c5f927d1a3c73b75ca98f02a905987fa ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/palatino/pplb7t.tfm" 1136768653 1616 371d1ee60c04b008c8fd760060cd34f1 ""
@@ -191,10 +192,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1746887052 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "build/project_report.aux" 1763692575.76798 3531 286ef4e10af11d14214118239bbf9f43 "pdflatex"
-  "build/project_report.bbl" 1763692515.71563 297 14e14cbeedff28b9ac17bea6ede88e10 "bibtex build/project_report"
-  "build/project_report.out" 1763692575.76861 2543 773ad39ab750ae19467d11e16b2424ea "pdflatex"
-  "project_report.tex" 1763692574.64645 14875 87953e5cb62e1322b0e77183bb8b8f9d ""
+  "build/project_report.aux" 1763742315.67165 3507 cfa40b35fbbebc11fc3c83a05dceedf3 "pdflatex"
+  "build/project_report.bbl" 1763742269.34498 297 14e14cbeedff28b9ac17bea6ede88e10 "bibtex build/project_report"
+  "build/project_report.out" 1763742315.67226 2472 43dca6d7de7a8641168cfaebfd4794ef "pdflatex"
+  "project_report.tex" 1763742314.53368 14695 c5f927d1a3c73b75ca98f02a905987fa ""
   (generated)
   "build/project_report.aux"
   "build/project_report.log"
