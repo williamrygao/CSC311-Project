@@ -1,0 +1,257 @@
+% =========================================================
+% CSC311 Final Project Report Template
+% Single column, 12pt, 8 pages max.
+% =========================================================
+
+\documentclass[12pt]{article}
+
+% ---------- Packages ----------
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}         % blank line between paragraphs, no indent
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath, amssymb}
+\usepackage{siunitx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{mathpazo}
+\usepackage{todonotes}
+
+% ---------- Captions & Lists ----------
+\captionsetup{font=small, labelfont=bf}
+\setlist[itemize]{noitemsep, topsep=2pt}
+\setlist[enumerate]{noitemsep, topsep=2pt}
+
+% ---------- Helpful macros ----------
+\newcommand{\bestmodel}{\textit{[Best Model Name]}}
+\newcommand{\projacc}{\textbf{[XX.XX\%]}}
+
+% ---------- Safe figure helper ----------
+\makeatletter
+\newcommand{\maybeincludegraphics}[3]{%
+  \begin{figure}[h]
+    \centering
+    \IfFileExists{#1}{%
+      \includegraphics[width=0.7\linewidth]{#1}%
+    }{%
+      \fbox{%
+        \parbox[c][0.28\textheight][c]{0.7\linewidth}{%
+          \centering
+          \vspace{0.5em}
+          \textit{[Placeholder for \texttt{#1}]}\\
+          Add your figure here.
+          \vspace{0.5em}
+        }%
+      }%
+    }%
+    \caption{#2}
+    \label{#3}
+  \end{figure}%
+}
+\makeatother
+
+% =========================================================
+% Title Page
+% =========================================================
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{3cm}
+
+    {\Large {CSC311: Introduction to Machine Learning} \par}
+    \vspace{1cm}
+    
+    {\Large {Project Report} \par}
+    \vspace{1cm}
+    
+    % {\large \textit{Optional Creative Project Title} \par}
+    \vspace{3cm}
+    
+    {\large Submitted by \par}
+    \vspace{0.5cm}
+    {\large Roy Gal, William Gao, Zehao Peng, Steven Qiao \par}
+    
+    \vfill
+    {\large University of Toronto \\ Fall 2025 \par}
+\end{titlepage}
+\clearpage
+\setcounter{page}{1}
+
+% ================================================
+% 2. Executive Summary
+% ================================================
+\section{Executive Summary}
+
+We explored random forest classifiers, naive Bayes classifiers, and multinomial logistic regression models. Our best-performing model was a random forest classifier, with a projected accuracy of 77\%. The random forest's ability to model complex, likely nonlinear relationships between a mix of categorial and text features makes it suitable for this task.
+
+% ==================================================
+% 3. Data Exploration
+% ==================================================
+\section{Data Exploration} 
+
+\subsection{Summary of dataset}
+Each of 275 students contributed one data point for each class label (ChatGPT, Claude, Gemini), resulting in a perfectly balanced 3-class dataset. The features include:
+
+\textbf{4 numerical features}: likelihood of academic use, frequency of suboptimal responses, frequency of references, frequency of user verification.
+
+\textbf{2 categorical features}: most suitable tasks, least suitable tasks.
+
+\textbf{3 text features}: most suitable tasks, least suitable task with explanation, method of user verification.
+
+The distribution of each of numerical feature is shown in Figure 1. As expected, the mean and median are generally close to the neutral answer 3, although the mode is 4 for the first and last questions.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.2]{../images/academic-distr.png}
+  \includegraphics[scale=0.2]{../images/suboptimal-distr.png}
+  \includegraphics[scale=0.2]{../images/references-distr.png}
+  \includegraphics[scale=0.2]{../images/verify-distr.png}
+  \caption{Distributions of numerical features.}
+\end{figure}
+\subsection{Data issues}
+\begin{itemize}
+  \item The dataset is missing at least 118 values, e.g.~student\_id = 3. Missing numerical features were imputed as 3 (neutral); see \texttt{build\_features} in \texttt{preprocessing.py}.
+  \item Two data points (student\_id = 2 and 15) contained a nonsensical feature ``\#NAME?''. These were removed prior to training to prevent the model from learning from it.
+\end{itemize}
+
+\subsection{Preprocessing}
+\begin{itemize}
+  \item To preserve ordinal information, Likert-scale features were converted to numerical by extracting the first character; see 
+  \texttt{extract\_rating} in \texttt{preprocessing.py}.
+  \item Multi-select survey responses were converted into binary indicator features; see \texttt{build\_features} in \texttt{preprocessing.py}.
+  \item The text data in the dataset was preprocessed by applying TF-IDF
+  vectorization to each free-text column, converting the raw text into numerical
+  features that capture the importance of each word relative to the whole; see \texttt{preprocessing\_tfidf.py}.
+\end{itemize}
+
+\subsection{Data Splitting}
+\begin{itemize}
+  \item data-split.py groups the cleaned dataset by student\_id and randomly splits 85/15 for training/test. The file training.csv was used for training and hyperparameter tuning; test.csv was only used to measure final model performance.
+\end{itemize}
+
+%   Connect findings to model choices by highlighting patterns that influenced your selection of models.
+%   Share key insights by presenting observations about especially relevant or predictive features.
+
+\section{Methodology}
+
+% Common mistakes: 
+% \begin{itemize}
+%     \item Using the test set during training, feature engineering, or hyperparameter tuning. 
+%     \item Tuning hyperparameters without a validation set that is separate from the training and test sets.  
+%     \item Omitting important training details in the report, making results hard to reproduce.  
+%     \item Jumping straight to deep networks when a simpler model might be sufficient and more interpretable.  
+%     \item Choosing the best model based only on default hyperparameters, then tuning only that model. This is unfair because other models might improve significantly with tuning as well. \textbf{This is the most common mistake we observed while grading the reports in winter 2025.}
+%     \item Presenting tables or plots without labels, units, or explanations.  
+%     \item Reporting only accuracy and ignoring other evaluation metrics such as precision, recall, or F1.  
+% \end{itemize}
+\subsection{Logistic Regression}
+Logistic (softmax) regression is a stable and efficient classifier for simple datasets such as this. It readily affords further techniques such as feature mapping to capture nonlinear relationships and regularization to prevent overfitting our small training set. We tuned a logistic regression model both including and excluding text features represented by TF-IDF, but observed that including TF-IDF features improved validation performance at the cost of higher variance between folds.
+
+\textbf{Optimization:} For training, we used the built-in optimizers in the \texttt{LogisticRegression} class from scikit-learn. We chose the \texttt{lbfgs} solver for L2 regularization and \texttt{saga} solver for L1 regularization. We set \texttt{max\_iter=5000} to ensure convergence when tuning hyperparameters, but used \texttt{max\_iter=1000} for final testing to meet the computational requirements.
+
+\textbf{Validation:} We employed grouped 5-fold cross-validation using \texttt{GroupKFold}, grouping by \texttt{student\_id} to avoid data leakage across folds; see \texttt{logistic\_regression\_tfidf.py}.
+
+\textbf{Hyperparameters:}
+The optimal combination of hyperparameters was selected by a grid search; see \texttt{log\_reg\_tuning} and \texttt{log\_reg\_tfidf\_tuning}. The search range for each hyperparameter is justified below.
+\begin{itemize}
+    \item \texttt{max\_features}: the maximum number of tokens considered in the TF-IDF representation of text features. We searched over the range $\{100, 300, 500, 1000\}$, and validation results (see Figure 2) showed that accuracy, precision, recall, and F1 score are all maximized at \texttt{max\_features} $= 300$, providing evidence that this range is reasonable for our dataset.
+    \item \texttt{n-gram range}. Allows the TF-IDF representation to consider short phrase combinations, rather than just individual words. We tried introducing bigrams (two word combinations), searching over the range \texttt{n-gram range} $ \in \{(1,1), (1,2)\}$. However we noticed immediate overfitting as $n$ increased as the mean training accuracy was 0.993 and the mean validation accuracy was 0.674 for $(1,2)$, as opposed to mean training accuracy 0.854 and mean validation accuracy 0.688 for $(1,1)$.
+    \item \textbf{Regularization strength:} $C \in \{0.1, 0.5, 1, 5, 10\}$, controlling the inverse of regularization. From Figure 2, we observe the trend of slightly underfitting when $C$ is too small, thus regularization is too strong, and overfitting when $C$ is too large.
+    \item \textbf{Penalty:} We experimented with both L1 and L2 regularization. 
+    L2 regularization encourages smaller coefficients and generally yields
+    stable models, while L1 can produce sparse coefficients, potentially useful
+    if some features are irrelevant. We could have also tried elasticnet which combines L1 and L2, but we found that L2 significantly outperformed L1.
+    \item \textbf{Solver:} We used \texttt{lbfgs} for L2 regularization and
+    \texttt{saga} for L1 regularization, as recommended by the
+    \texttt{scikit-learn} documentation~\cite{sklearn_logreg}.
+\end{itemize}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.25]{../images/logistic_regression/max_features.png}
+    \includegraphics[scale=0.25]{../images/logistic_regression/C.png}
+    \includegraphics[scale=0.25]{../images/logistic_regression/penalty.png}
+    \caption{Validation results as certain hyperparameters vary.}
+  \end{figure}
+
+\textbf{Evaluation:} We evaluated our models using accuracy, precision, recall, and F1. The final decision was heavily based on accuracy and F1, which combines precision and recall.
+
+\subsection{Naive Bayes Classifier (1 page)}
+Naive Bayes is well-suited for our dataset because most survey features are discrete, low-cardinality variables such as Likert-scale responses and binary indicators. The naive Bayes assumption may not be perfectly true, for example the numerical features regarding likelihood of academic use and frequency of suboptimal responses are plausibly correlated. However, it seems reasonable to assume that features are approximately conditionally independent given class, hence a naive Bayes classifier can be very effective.
+
+\subsection{Random Forest Classifier (1 page)}
+Decision trees are suitable for mixed feature types and capturing relationships between numerical features and binary categorical features, which form an important part of our dataset. The numerical features exhibit relatively low entropy distributions, with noticeable concentration near rating 3 to 4. This means sampled values are more predictable, and information gain from numerical feature splits can be quite high. We can extend this to random forests, using ensemble averaging to avoid overfitting.
+
+% ===========================================
+% 5. Results
+% ===========================================
+\section{Results (1 page)}\label{sec:results}
+\subsection{Logistic Regression}
+By performing a grid search across the hyperparameter ranges specified in the methodology, we found the best hyperparameters to be:
+\begin{itemize}
+  \item \texttt{max\_features} $= 300$.
+  \item \texttt{ngram\_range} $= (1,1)$.
+  \item $C = 5$.
+  \item \texttt{penalty} $= L2$.
+  \item \texttt{solver} $=$ saga.
+\end{itemize}
+The mean evaluation metrics for the best combinations of hyperparameters are summarized in Table 1.
+
+\textbf{Analysis:} Incorporating TF-IDF features improved validation performance, increasing all evaluation metrics by roughly 3-4 points. Training accuracy for the TF-IDF variant was substantially higher ($\approx$96\%), suggesting some degree of overfitting, though the validation scores remained higher than the non-text model. The confusion matrices indicate that most misclassifications occur between \textit{Claude} and \textit{Gemini}, likely reflecting subtle differences in responses that are challenging to capture with the current features.
+
+\textbf{Final Model Choice and Test Performance:} Based on cross-validation, the logistic regression model using TF-IDF features with $C=1$, L2 regularization, and the \texttt{lbfgs} solver achieved the best mean F1 score of 0.691. We estimate that this model will achieve approximately \textbf{69\% accuracy} on unseen test data, justified by consistent performance across all folds and stable cross-validation metrics.
+
+\subsection{Naive Bayes Classifier}
+\subsection{Random Forest Classifier}
+\begin{table}[h!]
+\centering
+\begin{tabular}{lcccc}
+\hline
+\textbf{Model} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
+\hline
+Logistic Regression (no text) & ? & ? & ? & ? \\
+Logistic Regression (with TF-IDF) & 0.659 & 0.653 & 0.659 & 0.655 \\
+Naive Bayes & ? & ? & ? & ? \\
+Random Forest & ? & ? & ? & ? \\
+\hline
+\end{tabular}
+\caption{Evaluation metrics for the three model families on the test set.}
+\label{tab:model_metrics}
+\end{table}
+
+\subsection{Instructions}
+What you should write in this section:
+\begin{itemize}
+  \item Report the results of your models using the evaluation metrics you described in the Methodology section, and present them clearly in tables or plots.
+  \item Analyze errors by describing common misclassifications or weaknesses, and include a confusion matrix or illustrative examples if helpful.
+  \item Compare models by summarizing performance across model families, and clearly state your final model choice as implemented in your prediction script.
+  \item Estimate test performance by \textbf{providing a single-number estimate of your best model's accuracy on the unseen test set}. Providing a range will earn \textbf{no} marks.
+  \item Justify your performance estimate by supporting it with empirical evidence such as validation results, cross-validation stability, learning curves, or consistency across seeds/folds.
+\end{itemize}
+% ================================================
+% 8. Contributions and Learning
+% ================================================
+\section{Contributions and Learning}
+\begin{itemize}
+  \item Roy Gal: 
+  \item William Gao: My main contribution was formulating the project methodology and writing the proposal and final report. The most important lesson I learned is to use a variety of evaluation metrics when selecting a final model.
+  \item Zehao Peng: 
+  \item Steven Qiao: 
+\end{itemize}
+This section should contain a list of 3-4 bullets, one for each student. Each student should write at most three sentences describing their main contributions and the most important lesson learned.
+
+% ==================================================
+% 9. References
+% ==================================================
+\section{References}
+
+% You should comment out this section for the final report.
+
+% Use references whenever appropriate (e.g., when you consult textbooks, research papers, online tutorials, or external code). Cite in the text using \verb|\cite{}|. For example, let's cite the two references provided in the \texttt{.bib} file \cite{bishop2006prml,hastie2009esl}.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

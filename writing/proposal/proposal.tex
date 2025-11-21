@@ -108,8 +108,8 @@
   \item The dataset has missing values, such as in lines 9-10 or training\_data\_clean.csv.
   \item A nonsensical feature ``\#NAME?'' appears 4 times.
   \item Missing or nonsensical values were handled by dropping rows. 
-  \item For features answered on a scale from 1 to 5, the first character of the string response was converted to an integer, to treat the feature as numerical.
-  \item Multi-select survey responses were converted into binary features.
+  \item Likert-scale features were converted to numerical, preserving ordinal information.
+  \item Multi-select survey responses were converted into binary indicator features.
 \end{itemize}
 \subsection{Data Splitting}
 \begin{itemize}

@@ -1,0 +1,8 @@
+\begin{thebibliography}{1}
+
+\bibitem{sklearn_logreg}
+scikit learn.
+\newblock sklearn.linear\_model.logisticregression --- scikit-learn 1.6.2 documentation.
+\newblock \url{https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html}, 2025.
+
+\end{thebibliography}
