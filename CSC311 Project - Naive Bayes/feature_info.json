@@ -1,0 +1,31 @@
+{
+  "feature_names": [
+    "academic_likelihood",
+    "subopt_frequency",
+    "reference_expectation",
+    "verify_frequency",
+    "best_Data processing or analysis",
+    "best_Explaining complex concepts simply",
+    "best_Math computations",
+    "best_Writing or debugging code",
+    "subopt_Data processing or analysis",
+    "subopt_Explaining complex concepts simply",
+    "subopt_Math computations",
+    "subopt_Writing or debugging code"
+  ],
+  "feature_types": {
+    "0": "numerical",
+    "1": "numerical",
+    "2": "numerical",
+    "3": "numerical",
+    "4": "categorical",
+    "5": "categorical",
+    "6": "categorical",
+    "7": "categorical",
+    "8": "categorical",
+    "9": "categorical",
+    "10": "categorical",
+    "11": "categorical"
+  },
+  "best_alpha": 0.01
+}
