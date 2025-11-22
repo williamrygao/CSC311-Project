@@ -12,12 +12,14 @@
 \usepackage{booktabs}
 \usepackage{amsmath, amssymb}
 \usepackage{siunitx}
-\usepackage[hidelinks]{hyperref}
 \usepackage{caption}
 \usepackage{enumitem}
 \usepackage{xcolor}
+\usepackage{float}
 \usepackage{mathpazo}
 \usepackage{todonotes}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
 
 % ---------- Captions & Lists ----------
 \captionsetup{font=small, labelfont=bf}
@@ -101,7 +103,7 @@ Each of 275 students contributed one data point for each class label (ChatGPT, C
 
 \textbf{3 text features}: most suitable tasks, least suitable task with explanation, method of user verification.
 
-The distribution of each of numerical feature is shown in Figure 1. As expected, the mean and median are generally close to the neutral answer 3, although the mode is 4 for the first and last questions.
+The distribution of each of numerical feature is shown in \Cref{fig:feature-distributions}. As expected, the mean and median are generally close to the neutral answer 3, although the mode is 4 for the first and last questions.
 
 \begin{figure}[h]
   \centering
@@ -109,7 +111,7 @@ The distribution of each of numerical feature is shown in Figure 1. As expected,
   \includegraphics[scale=0.2]{../images/suboptimal-distr.png}
   \includegraphics[scale=0.2]{../images/references-distr.png}
   \includegraphics[scale=0.2]{../images/verify-distr.png}
-  \caption{Distributions of numerical features.}
+  \caption{Distributions of numerical features.}\label{fig:feature-distributions}
 \end{figure}
 \subsection{Data issues}
 \begin{itemize}
@@ -119,9 +121,9 @@ The distribution of each of numerical feature is shown in Figure 1. As expected,
 
 \subsection{Preprocessing}
 \begin{itemize}
-  \item To preserve ordinal information, Likert-scale features were converted to numerical by extracting the first character; see 
+  \item To preserve ordinal information, Likert-scale features were converted to numerical by extracting the first character using regex pattern matching; see 
   \texttt{extract\_rating} in \texttt{preprocessing.py}.
-  \item Multi-select survey responses were converted into binary indicator features; see \texttt{build\_features} in \texttt{preprocessing.py}.
+  \item Multi-select survey responses were converted into binary indicator features using MultiLabelBinarizer; see \texttt{build\_features} in \texttt{preprocessing.py}.
   \item The text data in the dataset was preprocessed by applying TF-IDF
   vectorization to each free-text column, converting the raw text into numerical
   features that capture the importance of each word relative to the whole; see \texttt{preprocessing\_tfidf.py}.
@@ -152,14 +154,12 @@ Logistic (softmax) regression is a stable and efficient classifier for simple da
 
 \textbf{Optimization:} For training, we used the built-in optimizers in the \texttt{LogisticRegression} class from scikit-learn. We chose the \texttt{lbfgs} solver for L2 regularization and \texttt{saga} solver for L1 regularization. We set \texttt{max\_iter=5000} to ensure convergence when tuning hyperparameters, but used \texttt{max\_iter=1000} for final testing to meet the computational requirements.
 
-\textbf{Validation:} We employed grouped 5-fold cross-validation using \texttt{GroupKFold}, grouping by \texttt{student\_id} to avoid data leakage across folds; see \texttt{logistic\_regression\_tfidf.py}.
-
 \textbf{Hyperparameters:}
 The optimal combination of hyperparameters was selected by a grid search; see \texttt{log\_reg\_tuning} and \texttt{log\_reg\_tfidf\_tuning}. The search range for each hyperparameter is justified below.
 \begin{itemize}
-    \item \texttt{max\_features}: the maximum number of tokens considered in the TF-IDF representation of text features. We searched over the range $\{100, 300, 500, 1000\}$, and validation results (see Figure 2) showed that accuracy, precision, recall, and F1 score are all maximized at \texttt{max\_features} $= 300$, providing evidence that this range is reasonable for our dataset.
+    \item \texttt{max\_features}: the maximum number of tokens considered in the TF-IDF representation of text features. We searched over the range $\{100, 300, 500, 1000\}$, and validation results (see \Cref{fig:log-reg-hyperparams}) showed that accuracy, precision, recall, and F1 score are all maximized at \texttt{max\_features} $= 300$, providing evidence that this range is reasonable for our dataset.
     \item \texttt{n-gram range}. Allows the TF-IDF representation to consider short phrase combinations, rather than just individual words. We tried introducing bigrams (two word combinations), searching over the range \texttt{n-gram range} $ \in \{(1,1), (1,2)\}$. However we noticed immediate overfitting as $n$ increased as the mean training accuracy was 0.993 and the mean validation accuracy was 0.674 for $(1,2)$, as opposed to mean training accuracy 0.854 and mean validation accuracy 0.688 for $(1,1)$.
-    \item \textbf{Regularization strength:} $C \in \{0.1, 0.5, 1, 5, 10\}$, controlling the inverse of regularization. From Figure 2, we observe the trend of slightly underfitting when $C$ is too small, thus regularization is too strong, and overfitting when $C$ is too large.
+    \item \textbf{Regularization strength:} $C \in \{0.1, 0.5, 1, 5, 10\}$, controlling the inverse of regularization. From \Cref{fig:log-reg-hyperparams}, we observe the trend of slightly underfitting when $C$ is too small, thus regularization is too strong, and overfitting when $C$ is too large.
     \item \textbf{Penalty:} We experimented with both L1 and L2 regularization. 
     L2 regularization encourages smaller coefficients and generally yields
     stable models, while L1 can produce sparse coefficients, potentially useful
@@ -171,26 +171,40 @@ The optimal combination of hyperparameters was selected by a grid search; see \t
 
   \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.25]{../images/logistic_regression/max_features.png}
-    \includegraphics[scale=0.25]{../images/logistic_regression/C.png}
-    \includegraphics[scale=0.25]{../images/logistic_regression/penalty.png}
-    \caption{Validation results as certain hyperparameters vary.}
+    \includegraphics[scale=0.26]{../images/logistic_regression/max_features.png}
+    \includegraphics[scale=0.26]{../images/logistic_regression/C.png}
+    \includegraphics[scale=0.26]{../images/logistic_regression/penalty.png}
+    \caption{Logistic regression validation results as hyperparameters vary.}\label{fig:log-reg-hyperparams}
   \end{figure}
 
-\textbf{Evaluation:} We evaluated our models using accuracy, precision, recall, and F1. The final decision was heavily based on accuracy and F1, which combines precision and recall.
-
-\subsection{Naive Bayes Classifier (1 page)}
+\subsection{Naive Bayes Classifier}
 Naive Bayes is well-suited for our dataset because most survey features are discrete, low-cardinality variables such as Likert-scale responses and binary indicators. The naive Bayes assumption may not be perfectly true, for example the numerical features regarding likelihood of academic use and frequency of suboptimal responses are plausibly correlated. However, it seems reasonable to assume that features are approximately conditionally independent given class, hence a naive Bayes classifier can be very effective.
+
+\textbf{Optimization:} Naive Bayes does not require iterative optimization. Parameters have closed-form maximum-likelihood estimates derived from empirical counts (categorical features) or means/variances (numerical features).
+
+\textbf{Hyperparameters:} We tuned the Laplace smoothing coefficient $\alpha$, which addresses the zero-probability problem in Bayesian classifiers by adding a small constant $\alpha$ to each feature count. The search range for $\alpha$, namely $\alpha \in \{0.01,0.1,0.5,1.0,2.0,5.0,10.0\}$, was chosen following the recommendation of Manning, Raghavan, and Sch\"utze~\cite{Manning_Raghavan_Schütze_2008}. The effect of $\alpha$ on the evaluation metrics is shown in \Cref{fig:nb-alpha}.
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{../images/nb/alpha.png}
+    \caption{Naive Bayes validation results as the Laplace smoothing coefficient varies.}\label{fig:nb-alpha}
+  \end{figure}
 
 \subsection{Random Forest Classifier (1 page)}
 Decision trees are suitable for mixed feature types and capturing relationships between numerical features and binary categorical features, which form an important part of our dataset. The numerical features exhibit relatively low entropy distributions, with noticeable concentration near rating 3 to 4. This means sampled values are more predictable, and information gain from numerical feature splits can be quite high. We can extend this to random forests, using ensemble averaging to avoid overfitting.
+
+\subsection{Validation}
+We employed grouped 5-fold cross-validation using \texttt{GroupKFold}, grouping by \texttt{student\_id} to avoid data leakage across folds; see \texttt{logistic\_regression\_tfidf.py}.
+
+\subsection{Evaluation}
+We evaluated our models using accuracy, precision, recall, and F1. The final decision was heavily based on accuracy and F1, which combines precision and recall.
 
 % ===========================================
 % 5. Results
 % ===========================================
 \section{Results (1 page)}\label{sec:results}
 \subsection{Logistic Regression}
-Table 1 summarizes the best combination of hyperparameters for logistic regression. Table 2 contains the resulting mean evaluation metrics.
+\Cref{tab:best-hyperparameters} summarizes the best combination of hyperparameters for logistic regression. \Cref{tab:model_metrics} contains the resulting mean evaluation metrics of the test performance.
 \begin{table}[ht]
 \centering
 \begin{tabular}{lccccc}
@@ -205,10 +219,12 @@ No Text & L1 & saga & 0.1 & N/A & N/A \\
 \label{tab:best-hyperparameters}
 \end{table}
 
-\textbf{Error Analysis:} As evidenced by the confusion matrix (see Figure 3), the model achieved strong predictive performance (accuracy: 0.82, F1: 0.85) of ChatGPT, which it predicted more frequently, but often confused Claude (F1: 0.56) and Gemini (F1: 0.55). The top two highest-confidence misclassifications predicted ChatGPT when the true labels were Claude (confidence: 0.998490) and Gemini (confidence: 0.986409).
+\textbf{Error Analysis:} As evidenced by the confusion matrix (see \Cref{fig:confusion-matrix}), the model achieved strong predictive performance (accuracy: 0.82, F1: 0.85) of ChatGPT, which it predicted more frequently, but often confused Claude (F1: 0.56) and Gemini (F1: 0.55). The top two highest-confidence misclassifications predicted ChatGPT when the true labels were Claude (confidence: 0.998490) and Gemini (confidence: 0.986409).
 
 \subsection{Naive Bayes Classifier}
+The optimal Laplace smoothing coefficient was $\alpha = 5.0$. The test performance of this model is summarized in \Cref{tab:model_metrics}.
 \subsection{Random Forest Classifier}
+\subsection{Model Comparison}
 \begin{table}[h!]
 \centering
 \begin{tabular}{lcccc}
@@ -227,10 +243,8 @@ Random Forest & ? & ? & ? & ? \\
 
   \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.3]{../images/logistic_regression/confusion_matrix.png}    \caption{Confusion matrices for logistic regression, naive Bayes, and random forest models.}
+    \includegraphics[scale=0.3]{../images/logistic_regression/confusion_matrix.png}    \caption{Confusion matrices for logistic regression, naive Bayes, and random forest models.}\label{fig:confusion-matrix}
   \end{figure}
-
-\subsection{Model Comparison}
 The model families from strongest to weakest performance were: [RANK MODELS]. The estimated test performance of [BEST MODEL + 1-NUMBER ACCURACY ESTIMATE]. This estimate is the average accuracy across $5$-folds CV and the test performance, which were all quite consistent.
 
 % ================================================

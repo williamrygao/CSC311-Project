@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}
 
+\bibitem{Manning_Raghavan_Schütze_2008}
+Christopher~D. Manning, Prabhakar Raghavan, and Hinrich Schütze.
+\newblock {\em Introduction to Information Retrieval}.
+\newblock Cambridge University Press, 2008.
+
 \bibitem{sklearn_logreg}
 scikit learn.
 \newblock sklearn.linear\_model.logisticregression --- scikit-learn 1.6.2 documentation.
