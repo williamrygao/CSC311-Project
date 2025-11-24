@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  22 NOV 2025 10:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  23 NOV 2025 23:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -704,59 +704,59 @@ File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.127   \item T
-               he text data in the dataset was preprocessed by applying TF-IDF [1
+l.126   \item M
+               ulti-select survey responses were converted into binary indic... [1
 
  <../images/academic-distr.png> <../images/suboptimal-distr.png> <../images/references-distr.png> <../images/verify-distr.png>]
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 160.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 161.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 160.
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 161.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 160.
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 161.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 160.
+(Font)              scaled to size 12.50409pt on input line 161.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 160.
+(Font)              scaled to size 9.37807pt on input line 161.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 160.
+(Font)              scaled to size 7.29405pt on input line 161.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 160.
+(Font)              scaled to size 12.50409pt on input line 161.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 160.
+(Font)              scaled to size 9.37807pt on input line 161.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 160.
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 160.
+(Font)              scaled to size 7.29405pt on input line 161.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 161.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
 
 [2]
-<../images/logistic_regression/max_features.png, id=112, 578.16pt x 385.9218pt>
+<../images/logistic_regression/max_features.png, id=111, 578.16pt x 385.9218pt>
 File: ../images/logistic_regression/max_features.png Graphic file (type png)
 <use ../images/logistic_regression/max_features.png>
-Package pdftex.def Info: ../images/logistic_regression/max_features.png  used on input line 174.
+Package pdftex.def Info: ../images/logistic_regression/max_features.png  used on input line 175.
 (pdftex.def)             Requested size: 150.31805pt x 100.3373pt.
-<../images/logistic_regression/C.png, id=113, 578.16pt x 361.35pt>
+<../images/logistic_regression/C.png, id=112, 578.16pt x 361.35pt>
 File: ../images/logistic_regression/C.png Graphic file (type png)
 <use ../images/logistic_regression/C.png>
-Package pdftex.def Info: ../images/logistic_regression/C.png  used on input line 175.
+Package pdftex.def Info: ../images/logistic_regression/C.png  used on input line 176.
 (pdftex.def)             Requested size: 150.31805pt x 93.94878pt.
-<../images/logistic_regression/penalty.png, id=114, 578.16pt x 361.35pt>
+<../images/logistic_regression/penalty.png, id=113, 578.16pt x 361.35pt>
 File: ../images/logistic_regression/penalty.png Graphic file (type png)
 <use ../images/logistic_regression/penalty.png>
-Package pdftex.def Info: ../images/logistic_regression/penalty.png  used on input line 176.
+Package pdftex.def Info: ../images/logistic_regression/penalty.png  used on input line 177.
 (pdftex.def)             Requested size: 150.31805pt x 93.94878pt.
-<../images/nb/alpha.png, id=117, 551.4201pt x 359.1819pt>
+<../images/nb/alpha.png, id=116, 551.4201pt x 359.1819pt>
 File: ../images/nb/alpha.png Graphic file (type png)
 <use ../images/nb/alpha.png>
-Package pdftex.def Info: ../images/nb/alpha.png  used on input line 189.
+Package pdftex.def Info: ../images/nb/alpha.png  used on input line 190.
 (pdftex.def)             Requested size: 275.70938pt x 179.5905pt.
 
 
@@ -765,51 +765,86 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 [3 <../images/logistic_regression/max_features.png> <../images/logistic_regression/C.png> <../images/logistic_regression/penalty.png>]
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 218.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 218.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 218.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 218.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 218.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 218.
+Overfull \hbox (1.26338pt too wide) in paragraph at lines 197--198
+[]\OT1/ppl/b/n/12 Optimization: \OT1/ppl/m/n/12 We used the Gini im-pu-rity cri-te-rion for sklearn's \OT1/cmtt/m/n/12 RandomForestClassifier
+ []
+
 
 
 [4 <../images/nb/alpha.png>]
-<../images/logistic_regression/confusion_matrix.png, id=141, 433.62pt x 361.35pt>
+<../images/rf/vocab_size.png, id=136, 416.2752pt x 328.8285pt>
+File: ../images/rf/vocab_size.png Graphic file (type png)
+<use ../images/rf/vocab_size.png>
+Package pdftex.def Info: ../images/rf/vocab_size.png  used on input line 214.
+(pdftex.def)             Requested size: 145.6985pt x 115.09169pt.
+<../images/rf/n_estimators.png, id=137, 409.7709pt x 328.8285pt>
+File: ../images/rf/n_estimators.png Graphic file (type png)
+<use ../images/rf/n_estimators.png>
+Package pdftex.def Info: ../images/rf/n_estimators.png  used on input line 215.
+(pdftex.def)             Requested size: 143.42195pt x 115.09169pt.
+<../images/rf/max_depth.png, id=138, 409.7709pt x 328.8285pt>
+File: ../images/rf/max_depth.png Graphic file (type png)
+<use ../images/rf/max_depth.png>
+Package pdftex.def Info: ../images/rf/max_depth.png  used on input line 216.
+(pdftex.def)             Requested size: 143.42195pt x 115.09169pt.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 11.40997pt on input line 242.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 8.33606pt on input line 242.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 6.25204pt on input line 242.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 11.40997pt on input line 242.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 8.33606pt on input line 242.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 6.25204pt on input line 242.
+
+
+[5 <../images/rf/vocab_size.png> <../images/rf/n_estimators.png> <../images/rf/max_depth.png>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../images/logistic_regression/confusion_matrix.png, id=155, 433.62pt x 361.35pt>
 File: ../images/logistic_regression/confusion_matrix.png Graphic file (type png)
 <use ../images/logistic_regression/confusion_matrix.png>
-Package pdftex.def Info: ../images/logistic_regression/confusion_matrix.png  used on input line 246.
-(pdftex.def)             Requested size: 130.087pt x 108.40584pt.
+Package pdftex.def Info: ../images/logistic_regression/confusion_matrix.png  used on input line 311.
+(pdftex.def)             Requested size: 151.76927pt x 126.4744pt.
+<../images/nb/confusion_matrix.png, id=156, 433.62pt x 361.35pt>
+File: ../images/nb/confusion_matrix.png Graphic file (type png)
+<use ../images/nb/confusion_matrix.png>
+Package pdftex.def Info: ../images/nb/confusion_matrix.png  used on input line 312.
+(pdftex.def)             Requested size: 151.76927pt x 126.4744pt.
+<../images/rf/confusion_matrix.png, id=157, 433.62pt x 361.35pt>
+File: ../images/rf/confusion_matrix.png Graphic file (type png)
+<use ../images/rf/confusion_matrix.png>
+Package pdftex.def Info: ../images/rf/confusion_matrix.png  used on input line 313.
+(pdftex.def)             Requested size: 151.76927pt x 126.4744pt.
 
 
-[5 <../images/logistic_regression/confusion_matrix.png>] (build/project_report.bbl)
+[6 <../images/logistic_regression/confusion_matrix.png> <../images/nb/confusion_matrix.png> <../images/rf/confusion_matrix.png>] (build/project_report.bbl)
 
-[6] (build/project_report.aux)
+[7] (build/project_report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `project_report.out' has not changed.
-(rerunfilecheck)             Checksum: 65FCCFD3A5BA9FAB36A80FD901F51ACD;2631.
+(rerunfilecheck)             Checksum: F56B13D5022ABDDD01A731DEB3ECFF86;2517.
  ) 
 Here is how much of TeX's memory you used:
- 28901 strings out of 473190
- 593467 string characters out of 5715801
- 948045 words of memory out of 5000000
- 51706 multiletter control sequences out of 15000+600000
+ 28945 strings out of 473190
+ 594950 string characters out of 5715801
+ 953045 words of memory out of 5000000
+ 51747 multiletter control sequences out of 15000+600000
  583407 words of font info for 102 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,9n,101p,636b,1140s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,10n,101p,652b,1142s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on build/project_report.pdf (7 pages, 374450 bytes).
+Output written on build/project_report.pdf (8 pages, 648141 bytes).
 PDF statistics:
- 197 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
- 34 named destinations out of 1000 (max. 500000)
- 202 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 219 PDF objects out of 1000 (max. 8388607)
+ 165 compressed objects within 2 object streams
+ 37 named destinations out of 1000 (max. 500000)
+ 227 words of extra memory for PDF output out of 10000 (max. 10000000)
 

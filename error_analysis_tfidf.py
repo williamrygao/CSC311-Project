@@ -54,7 +54,7 @@ def save_confusion_matrix(y_true, y_pred, class_names=INDEX_TO_LABEL, save_path=
     
     plt.xlabel("Predicted label")
     plt.ylabel("True label")
-    plt.title("Logistic Regression (with TF-IDF) Confusion Matrix")
+    plt.title("Logistic Regression Confusion Matrix")
     
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
@@ -71,7 +71,7 @@ save_confusion_matrix(y_true, y_pred)
 # Classification report
 # ------------------------
 print("\nClassification Report:")
-print(classification_report(y_true, y_pred, target_names=INDEX_TO_LABEL))
+print(classification_report(y_true, y_pred, target_names=INDEX_TO_LABEL, digits=3))
 
 # ------------------------
 # High-confidence misclassifications

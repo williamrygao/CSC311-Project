@@ -87,7 +87,7 @@
 % ================================================
 \section{Executive Summary}
 
-We explored random forest classifiers, naive Bayes classifiers, and multinomial logistic regression models. Our best-performing model was a random forest classifier, with a projected accuracy of 77\%. The random forest's ability to model complex, likely nonlinear relationships between a mix of categorial and text features makes it suitable for this task.
+We explored random forest classifiers, naive Bayes classifiers, and multinomial logistic regression models. Our best-performing model was a random forest classifier, with a projected accuracy of 76.4\%. The random forest's ability to model complex, likely nonlinear relationships between a mix of categorial and text features makes it suitable for this task.
 
 % ==================================================
 % 3. Data Exploration
@@ -124,9 +124,10 @@ The distribution of each of numerical feature is shown in \Cref{fig:feature-dist
   \item To preserve ordinal information, Likert-scale features were converted to numerical by extracting the first character using regex pattern matching; see 
   \texttt{extract\_rating} in \texttt{preprocessing.py}.
   \item Multi-select survey responses were converted into binary indicator features using MultiLabelBinarizer; see \texttt{build\_features} in \texttt{preprocessing.py}.
-  \item The text data in the dataset was preprocessed by applying TF-IDF
+  \item For logistic regression, the text data in the dataset was preprocessed by applying TF-IDF
   vectorization to each free-text column, converting the raw text into numerical
   features that capture the importance of each word relative to the whole; see \texttt{preprocessing\_tfidf.py}.
+  \item For the random forest classifier, a bag of words representation was implemented in \texttt{random\_forest.ipynb}.
 \end{itemize}
 
 \subsection{Data Splitting}
@@ -190,11 +191,34 @@ Naive Bayes is well-suited for our dataset because most survey features are disc
     \caption{Naive Bayes validation results as the Laplace smoothing coefficient varies.}\label{fig:nb-alpha}
   \end{figure}
 
-\subsection{Random Forest Classifier (1 page)}
-Decision trees are suitable for mixed feature types and capturing relationships between numerical features and binary categorical features, which form an important part of our dataset. The numerical features exhibit relatively low entropy distributions, with noticeable concentration near rating 3 to 4. This means sampled values are more predictable, and information gain from numerical feature splits can be quite high. We can extend this to random forests, using ensemble averaging to avoid overfitting.
+\subsection{Random Forest Classifier}
+Decision trees are suitable for mixed feature types and capturing relationships between numerical features and binary categorical features, which form an important part of our dataset. The numerical features exhibit relatively concentrated distributions, with the most concentration near rating 3 to 4. This means sampled values are more predictable, and Gini impurity from numerical feature splits can be quite informative. We can extend this to random forests, using ensemble averaging to avoid overfitting.
+
+\textbf{Optimization:} We used the Gini impurity criterion for sklearn's \texttt{RandomForestClassifier} class, which measures how mixed the class labels are. Since the hyperparameters do not interact, it is not necessary to perform a grid search; it suffices to tune each hyperparameter separately.
+
+\textbf{Hyperparameters:} See \texttt{random\_forest.ipynb} for implementation details.
+\begin{itemize}
+  \item \texttt{vocab\_size}: the number of words considered in the bag of words representation of text features. The search range 
+  \[\{1, 10, 50, 100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5687\}\]
+  ranges from a single word to the total number of distinct words in the dataset, $5687$.
+  
+  \item \texttt{n\_estimators}: the number of trees in the random forest. \texttt{range}$(1, 1000, 10)$ covers a very broad range, and the validation results (see \Cref{fig:rf-hyperparams}) shows a visible initial learning curve and eventual smoothing, justifying this search range.
+  
+  \item \texttt{max\_depth}: the maximum depth of a tree in the random forest. Again, the search range was \texttt{range}$(1, 1000, 10)$, and is justified by the initially steep learning rate and almost immediate smoothing.
+  \item \texttt{max\_features}: the maximum number of features considered at each split in a tree. We searched among 'sqrt', 'log2', 0.2, 0.5, 1.0, but the validation accuracy for 'sqrt' was by far the highest.
+  \item \texttt{min\_samples}: the minimum number of samples required to be a leaf node. In the search range $\{1, 2, 5, 10, 20, 50\}$, \texttt{min\_samples} $=1$ attained the highest validation accuracy by a large margin.
+\end{itemize}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.35]{../images/rf/vocab_size.png}
+    \includegraphics[scale=0.35]{../images/rf/n_estimators.png}
+    \includegraphics[scale=0.35]{../images/rf/max_depth.png}
+    \caption{Random forest classifier validation results as the key hyperparameters vary.}\label{fig:rf-hyperparams}
+  \end{figure}
 
 \subsection{Validation}
-We employed grouped 5-fold cross-validation using \texttt{GroupKFold}, grouping by \texttt{student\_id} to avoid data leakage across folds; see \texttt{logistic\_regression\_tfidf.py}.
+We employed grouped 5-fold cross-validation using \texttt{GroupKFold}, grouping by \texttt{student\_id} to avoid data leakage across folds (see \texttt{logistic\_regression\_tfidf.py}) as well as hold-out validation with a 70/15/15 split for training/validation/test.
 
 \subsection{Evaluation}
 We evaluated our models using accuracy, precision, recall, and F1. The final decision was heavily based on accuracy and F1, which combines precision and recall.
@@ -202,9 +226,9 @@ We evaluated our models using accuracy, precision, recall, and F1. The final dec
 % ===========================================
 % 5. Results
 % ===========================================
-\section{Results (1 page)}\label{sec:results}
+\section{Results}\label{sec:results}
 \subsection{Logistic Regression}
-\Cref{tab:best-hyperparameters} summarizes the best combination of hyperparameters for logistic regression. \Cref{tab:model_metrics} contains the resulting mean evaluation metrics of the test performance.
+\Cref{tab:best-hyperparameters} summarizes the best combination of hyperparameters for logistic regression. \Cref{tab:model_metrics} contains the resulting test performance metrics, overall and on each class.
 \begin{table}[ht]
 \centering
 \begin{tabular}{lccccc}
@@ -219,45 +243,88 @@ No Text & L1 & saga & 0.1 & N/A & N/A \\
 \label{tab:best-hyperparameters}
 \end{table}
 
-\textbf{Error Analysis:} As evidenced by the confusion matrix (see \Cref{fig:confusion-matrix}), the model achieved strong predictive performance (accuracy: 0.82, F1: 0.85) of ChatGPT, which it predicted more frequently, but often confused Claude (F1: 0.56) and Gemini (F1: 0.55). The top two highest-confidence misclassifications predicted ChatGPT when the true labels were Claude (confidence: 0.998490) and Gemini (confidence: 0.986409).
+\textbf{Error Analysis:} As evidenced by the confusion matrix (see \Cref{fig:confusion-matrix}) and the evaluation metrics (see \Cref{tab:model_metrics}), the model achieved high accuracy (0.818) and F1 (0.847) for ChatGPT, but often confused Claude (F1: 0.564) and Gemini (F1: 0.554). The logistic regression classifier exhibited consistency between precision and recall, which suggests it is well-balanced in handling false positives and false negatives across classes, but frequently confuses Claude and Gemini.
 
 \subsection{Naive Bayes Classifier}
 The optimal Laplace smoothing coefficient was $\alpha = 5.0$. The test performance of this model is summarized in \Cref{tab:model_metrics}.
+
+\textbf{Error Analysis:} From the confusion matrix, we see that the naive Bayes classifier identified ChatGPT with high recall (0.875), but lower precision (0.648). It suffered with low recall (0.382) for Gemini, which it confused the most with Claude but also significantly with ChatGPT. It demonstrated balanced but mediocre precision (0.529) and recall (0.546) for Claude. This suggests that the naive Bayes classifier suffer from many false positives for ChatGPT and many false negatives for Gemini.
+
 \subsection{Random Forest Classifier}
+\Cref{tab:best-hyperparameters-rf} shows the best hyperparameters for random forests, each tuned independently.
+\begin{table}[ht]
+\centering
+\begin{tabular}{lccc}
+\hline
+\textbf{Hyperparameter} & \texttt{vocab\_size} & \texttt{n\_estimators} & \texttt{max\_depth} \\
+\hline
+\textbf{Value} & 500 & 371 & 51 \\
+\textbf{Validation Score} & 0.752 & 0.771 & 0.771 \\
+\hline
+\end{tabular}
+\caption{Logistic regression hyperparameters with strongest $5$-fold CV performance.}
+\label{tab:best-hyperparameters-rf}
+\end{table}
+
+\textbf{Error Analysis:} The random forest classifier is the overall strongest according to every metric, although according to a per-class analysis it suffers from a low precision for ChatGPT predictions (0.644) and an extremely low recall for Gemini (0.267). Similarly to the naive Bayes classifier, the random forest suffers from many false positives for ChatGPT and false negatives for Gemini.
+
 \subsection{Model Comparison}
 \begin{table}[h!]
 \centering
 \begin{tabular}{lcccc}
 \hline
-\textbf{Model} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
+\textbf{Macro} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
 \hline
-Logistic Regression (no text) & 0.650 & 0.643 & 0.650 & 0.645 \\
+% Logistic Regression (no text) & 0.650 & 0.643 & 0.650 & 0.645 \\
 Logistic Regression (with TF-IDF) & 0.659 & 0.653 & 0.659 & 0.655 \\
-Naive Bayes & ? & ? & ? & ? \\
-Random Forest & ? & ? & ? & ? \\
+Naive Bayes & 0.617 & 0.621 & 0.601 & 0.591 \\
+Random Forest & 0.764 & 0.757 & 0.724 & 0.733 \\
+\hline
+\textbf{ChatGPT} & & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
+\hline
+% Logistic Regression (no text) & 0.650 & 0.643 & 0.650 & 0.645 \\
+Logistic Regression &  & 0.818 & 0.878 & 0.847 \\
+Naive Bayes &  & 0.648 & 0.875 & 0.745 \\
+Random Forest &  & 0.644 & 0.940 & 0.764 \\
+\hline
+\textbf{Claude} &  & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
+\hline
+% Logistic Regression (no text) & 0.650 & 0.643 & 0.650 & 0.645 \\
+Logistic Regression & & 0.595 & 0.537 & 0.564 \\
+Naive Bayes & & 0.529 & 0.546 & 0.537 \\
+Random Forest & & 0.593 & 0.533 & 0.561 \\
+\hline
+\textbf{Gemini} &  & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
+\hline
+% Logistic Regression (no text) & 0.650 & 0.643 & 0.650 & 0.645 \\
+Logistic Regression &  & 0.548 & 0.561 & 0.554 \\
+Naive Bayes &  & 0.684 & 0.382 & 0.491 \\
+Random Forest &  & 0.800 & 0.267 & 0.400 \\
 \hline
 \end{tabular}
 \caption{Evaluation metrics for the three model families on the test set.}
 \label{tab:model_metrics}
 \end{table}
 
-  \begin{figure}[h]
+  \begin{figure}[ht]
     \centering
-    \includegraphics[scale=0.3]{../images/logistic_regression/confusion_matrix.png}    \caption{Confusion matrices for logistic regression, naive Bayes, and random forest models.}\label{fig:confusion-matrix}
+    \includegraphics[scale=0.35]{../images/logistic_regression/confusion_matrix.png}
+    \includegraphics[scale=0.35]{../images/nb/confusion_matrix.png}
+    \includegraphics[scale=0.35]{../images/rf/confusion_matrix.png}
+    \caption{Confusion matrices for logistic regression, naive Bayes, and random forest models.}\label{fig:confusion-matrix}
   \end{figure}
-The model families from strongest to weakest performance were: [RANK MODELS]. The estimated test performance of [BEST MODEL + 1-NUMBER ACCURACY ESTIMATE]. This estimate is the average accuracy across $5$-folds CV and the test performance, which were all quite consistent.
+The model families from strongest to weakest performance were: random forest, logistic regression, naive Bayes. The estimated test performance of the random forest classifier is 76.4\%. Since its performance on our test was very consistent (within 1\% accuracy and F1) with the validation performance, we simply used the test accuracy for our estimate.
 
 % ================================================
 % 8. Contributions and Learning
 % ================================================
 \section{Contributions and Learning}
 \begin{itemize}
-  \item Roy Gal: 
+  \item Roy Gal: I was mainly responsible for implementing the logistic regression classifier. I learned how to use a TF-IDF representation for text features, even though it ultimately had a small impact on the model's accuracy.
   \item William Gao: My main contribution was formulating the project methodology and writing the proposal and final report. The most important lesson I learned is to use a variety of evaluation metrics when selecting a final model.
-  \item Zehao Peng: 
-  \item Steven Qiao: 
+  \item Zehao Peng: I contributed to this project by implementing and optimizing the random forest classifier. I learned that when hyperparameters do not interact, it suffices to tune them individually rather than to perform a grid search.
+  \item Steven Qiao: I contributed to this project by constructing the Naive Bayes model using the given training data. In the process of training and validating, I discovered that text features only marginally improved the accuracy of the model but computationally ensued a lot of overhead. I was able to make the optimal decision by considering the trade-off.
 \end{itemize}
-This section should contain a list of 3-4 bullets, one for each student. Each student should write at most three sentences describing their main contributions and the most important lesson learned.
 
 % ==================================================
 % 9. References
